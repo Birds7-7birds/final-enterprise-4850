@@ -1,14 +1,64 @@
 pipeline {
     agent any
+//     parameters {
+//         booleanParam(defaultValue: false, description: 'Deploy the App', name: 'DEPLOY')
+//     }
     stages {
-        stage('deploy') {
+        stage('Build') {
             steps {
-                sshagent(credentials : ['XavVM3855']) {
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-24-139-40.us-west-2.compute.amazonaws.com 'cd ~/mystuff/3855-api-project/deployment; docker-compose down; docker image rm hbibroida/receiver:receiverapp; docker image rm hbibroida/storage:storageapp; docker image rm hbibroida/processing_service:processing_serviceapp; docker image rm hbibroida/audit:auditapp'"
-                    // sh "ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-24-139-40.us-west-2.compute.amazonaws.com 'docker pull hbibroida/receiver:receiverapp; docker pull hbibroida/storage:storageapp; docker pull hbibroida/audit:auditapp; docker pull hbibroida/processing_service:processing_serviceapp'"
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-24-139-40.us-west-2.compute.amazonaws.com 'cd ~/mystuff/3855-api-project/deployment; docker-compose up -d'"
+                script {
+                    sh 'echo "hello"'
+                    } 
                 }
             }
         }
+        // SONAR QUBE IS REMOVED. ADD BACK IN IF USING
+        // stage("Quality Gate") {
+        //     steps {
+        //         timeout(time: 1, unit: 'HOURS') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
+//         stage('Test') {
+//             steps{
+//                 script{
+//                     def rmfiles = findFiles(glob: "*reports/*.xml")
+//                     for (rmfile in rmfiles) {
+//                         sh "rm ${rmfile.path}"
+//                     }
+//                 }
+//                 sh 'mvn test'
+//             } 
+//             post {
+//                 always {
+//                     junit 'target/surefire-reports/*.xml'
+//                 }
+//             }
+//         }
+//         stage("Deploy") {
+//             steps {
+//                 sh 'mvn -B -DskipTests -s settings.xml clean deploy'
+//             }
+//         }
+//         stage("Package") {
+//             steps {
+//                 withCredentials([string(credentialsId: 'DockerHub', variable: 'TOKEN')]) {
+//                     sh "docker login -u 'hbibroida' -p '$TOKEN' docker.io"
+//                     sh "docker build -t myapp:latest --tag hbibroida/samplejava:myapp ."
+//                     sh "docker push hbibroida/samplejava:myapp"
+//                 }
+//             }
+//         }
+//         stage("Deliver") {
+//             when {
+//                 expression { params.DEPLOY }
+//             }
+//             steps {
+//                 sh "docker run myapp:latest"
+//                 // sh "chmod +x ./ci/scripts/deliver.sh"
+//                 // sh './ci/scripts/deliver.sh'
+//             }
+//         }
     }
 }
