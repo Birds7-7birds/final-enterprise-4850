@@ -18,8 +18,7 @@ pipeline {
                     sh 'echo "Installing the Python Requirements..."'
                     sh "pip install -r requirements.txt"
                     sh 'echo "Requirement complete."'
-                    } 
-                }
+                } 
             }
         }
         stage('Code Quality') {
@@ -63,7 +62,7 @@ pipeline {
                     onlyIfSuccessful: true
             }
         }
-
+    }
 //         stage('Test') {
 //             steps{
 //                 script{
